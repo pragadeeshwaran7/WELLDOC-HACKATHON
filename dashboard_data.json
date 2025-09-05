@@ -1,0 +1,495 @@
+{
+  "model_performance": {
+    "auroc": 0.7024,
+    "auprc": 0.5941,
+    "sensitivity": 0.2342,
+    "specificity": 0.9821,
+    "precision": 0.8387,
+    "accuracy": 0.8154
+  },
+  "patient_cohort": {
+    "total_patients": 100,
+    "total_predictions": 1300,
+    "positive_cases": 111,
+    "negative_cases": 279
+  },
+  "risk_distribution": {
+    "very_low": 127,
+    "low": 210,
+    "moderate": 27,
+    "high": 18,
+    "very_high": 8
+  },
+  "feature_importance": [
+    {
+      "feature": "bnp_max",
+      "importance": 0.05300547083872515,
+      "clinical_name": "Bnp Max"
+    },
+    {
+      "feature": "heart_rate_mean",
+      "importance": 0.05066167748848686,
+      "clinical_name": "Heart Rate Mean"
+    },
+    {
+      "feature": "glucose_mean",
+      "importance": 0.048563962812094415,
+      "clinical_name": "Glucose Mean"
+    },
+    {
+      "feature": "oxygen_saturation_mean",
+      "importance": 0.04402584376082025,
+      "clinical_name": "Oxygen Saturation Mean"
+    },
+    {
+      "feature": "bnp_mean",
+      "importance": 0.04158400251670855,
+      "clinical_name": "Bnp Mean"
+    },
+    {
+      "feature": "creatinine_trend",
+      "importance": 0.04007524258757419,
+      "clinical_name": "Creatinine Trend"
+    },
+    {
+      "feature": "creatinine_mean",
+      "importance": 0.03993304172630323,
+      "clinical_name": "Creatinine Mean"
+    },
+    {
+      "feature": "hba1c_latest",
+      "importance": 0.03719292283545481,
+      "clinical_name": "Hba1C Latest"
+    },
+    {
+      "feature": "respiratory_rate_std",
+      "importance": 0.03700719608049136,
+      "clinical_name": "Respiratory Rate Std"
+    },
+    {
+      "feature": "oxygen_saturation_min",
+      "importance": 0.036706864045670584,
+      "clinical_name": "Oxygen Saturation Min"
+    },
+    {
+      "feature": "temperature_mean",
+      "importance": 0.03493630511588971,
+      "clinical_name": "Temperature Mean"
+    },
+    {
+      "feature": "systolic_bp_trend",
+      "importance": 0.03387058045152192,
+      "clinical_name": "Systolic Bp Trend"
+    },
+    {
+      "feature": "respiratory_rate_mean",
+      "importance": 0.033767170940329314,
+      "clinical_name": "Respiratory Rate Mean"
+    },
+    {
+      "feature": "diastolic_bp_mean",
+      "importance": 0.032853517971034626,
+      "clinical_name": "Diastolic Bp Mean"
+    },
+    {
+      "feature": "systolic_bp_mean",
+      "importance": 0.032689480995974,
+      "clinical_name": "Systolic Bp Mean"
+    }
+  ],
+  "calibration": {
+    "mean_predicted_value": [
+      0.04764705882352941,
+      0.17136363636363636,
+      0.2491666666666668,
+      0.34939393939393937,
+      0.4495454545454546,
+      0.524,
+      0.6533333333333333,
+      0.7700000000000001,
+      0.86,
+      0.9450000000000001
+    ],
+    "fraction_of_positives": [
+      0.058823529411764705,
+      0.24545454545454545,
+      0.16666666666666666,
+      0.3333333333333333,
+      0.5,
+      0.4,
+      0.8333333333333334,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "clinical_explanations": {
+    "bnp_max": "Maximum B-type Natriuretic Peptide - indicates heart failure severity",
+    "heart_rate_mean": "Average heart rate - elevated rates may indicate cardiac stress",
+    "glucose_mean": "Average blood glucose - poor diabetes control increases risk",
+    "oxygen_saturation_mean": "Average oxygen saturation - declining levels indicate respiratory issues",
+    "bnp_mean": "Average B-type Natriuretic Peptide - consistently elevated indicates heart failure",
+    "creatinine_trend": "Kidney function trend - worsening indicates renal deterioration",
+    "creatinine_mean": "Average kidney function - elevated indicates kidney disease progression",
+    "hba1c_latest": "Latest diabetes control marker - higher values indicate poor control",
+    "respiratory_rate_std": "Respiratory rate variability - high variability indicates instability",
+    "oxygen_saturation_min": "Minimum oxygen saturation - low values indicate severe respiratory issues",
+    "medication_adherence_mean": "Average medication compliance - low adherence increases risk",
+    "medication_adherence_trend": "Medication compliance trend - declining adherence is concerning",
+    "systolic_bp_trend": "Blood pressure trend - rapidly changing BP indicates instability",
+    "glucose_trend": "Blood glucose trend - rapidly changing glucose indicates poor control",
+    "temperature_mean": "Average body temperature - elevated may indicate infection"
+  },
+  "sample_patients": [
+    {
+      "patient_id": "Patient_001",
+      "predicted_risk": 0.24,
+      "risk_percentage": 24.0,
+      "risk_level": "Low",
+      "risk_color": "#28a745",
+      "actual_outcome": false,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 101.6,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 76.78,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 148.28,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 97.5,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 41.66,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_002",
+      "predicted_risk": 0.16,
+      "risk_percentage": 16.0,
+      "risk_level": "Very Low",
+      "risk_color": "#6c757d",
+      "actual_outcome": true,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 103.05,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 76.22,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 148.36,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 98.26,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 50.4,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_003",
+      "predicted_risk": 0.22,
+      "risk_percentage": 22.0,
+      "risk_level": "Low",
+      "risk_color": "#28a745",
+      "actual_outcome": false,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 105.12,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 74.41,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 141.71,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 97.68,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 53.1,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_004",
+      "predicted_risk": 0.26,
+      "risk_percentage": 26.0,
+      "risk_level": "Low",
+      "risk_color": "#28a745",
+      "actual_outcome": false,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 114.98,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 75.98,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 140.6,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 97.81,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 55.28,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_005",
+      "predicted_risk": 0.17,
+      "risk_percentage": 17.0,
+      "risk_level": "Very Low",
+      "risk_color": "#6c757d",
+      "actual_outcome": false,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 114.98,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 75.42,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 137.67,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 97.95,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 52.96,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_006",
+      "predicted_risk": 0.21,
+      "risk_percentage": 21.0,
+      "risk_level": "Low",
+      "risk_color": "#28a745",
+      "actual_outcome": false,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 107.82,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 77.21,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 142.63,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 97.79,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 49.05,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_007",
+      "predicted_risk": 0.19,
+      "risk_percentage": 19.0,
+      "risk_level": "Very Low",
+      "risk_color": "#6c757d",
+      "actual_outcome": true,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 97.27,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 75.29,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 148.43,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 97.97,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 51.5,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_008",
+      "predicted_risk": 0.35,
+      "risk_percentage": 35.0,
+      "risk_level": "Low",
+      "risk_color": "#28a745",
+      "actual_outcome": false,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 456.05,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 74.95,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 144.43,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 97.98,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 271.51,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_009",
+      "predicted_risk": 0.94,
+      "risk_percentage": 94.0,
+      "risk_level": "Very High",
+      "risk_color": "#dc3545",
+      "actual_outcome": true,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 100.74,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 81.29,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 155.99,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 96.14,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 44.81,
+          "feature": "bnp_mean"
+        }
+      ]
+    },
+    {
+      "patient_id": "Patient_010",
+      "predicted_risk": 0.25,
+      "risk_percentage": 25.0,
+      "risk_level": "Low",
+      "risk_color": "#28a745",
+      "actual_outcome": false,
+      "key_factors": [
+        {
+          "name": "Bnp Max",
+          "value": 518.37,
+          "feature": "bnp_max"
+        },
+        {
+          "name": "Heart Rate Mean",
+          "value": 77.23,
+          "feature": "heart_rate_mean"
+        },
+        {
+          "name": "Glucose Mean",
+          "value": 101.58,
+          "feature": "glucose_mean"
+        },
+        {
+          "name": "Oxygen Saturation Mean",
+          "value": 98.09,
+          "feature": "oxygen_saturation_mean"
+        },
+        {
+          "name": "Bnp Mean",
+          "value": 262.3,
+          "feature": "bnp_mean"
+        }
+      ]
+    }
+  ]
+}

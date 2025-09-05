@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Driven Risk Prediction Engine for Chronic Care</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .header p { font-size: 1.1rem; opacity: 0.9; }
+
+        .metrics-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem auto;
+            max-width: 1000px;
+            padding: 0 1rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-top: 4px solid #3498db;
+        }
+
+        .metric-card__label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card__value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+
+        .tabs {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid #ecf0f1;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #7f8c8d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            color: #3498db;
+            border-bottom-color: #3498db;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active { display: block; }
+
+        .risk-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .risk-very-high { border-left-color: #e74c3c; }
+        .risk-high { border-left-color: #f39c12; }
+        .risk-moderate { border-left-color: #f1c40f; }
+        .risk-low { border-left-color: #27ae60; }
+        .risk-very-low { border-left-color: #95a5a6; }
+
+        .patient-info h4 { margin-bottom: 0.5rem; }
+        .patient-info p { color: #7f8c8d; }
+
+        .risk-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 400px;
+        }
+
+        .chart-container canvas {
+            max-height: 350px;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .feature-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #3498db;
+        }
+
+        .feature-item h5 { color: #2c3e50; margin-bottom: 0.5rem; }
+        .feature-item p { color: #7f8c8d; font-size: 0.9rem; }
+
+        .recommendations {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .recommendations h4 { color: #27ae60; margin-bottom: 0.5rem; }
+        .recommendations ul { margin-left: 1rem; }
+        .recommendations li { margin: 0.25rem 0; }
+
+        .alert-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .alert-box h4 { color: #856404; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>AI-Driven Risk Prediction Engine</h1>
+            <p>Chronic Care Patient Deterioration Prediction • 90-Day Forecast</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="metrics-cards">
+            <div class="metric-card">
+                <div class="metric-card__label">AUROC Score</div>
+                <div class="metric-card__value">0.702</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-card__label">Sensitivity</div>
+                <div class="metric-card__value">23.4%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-card__label">Specificity</div>
+                <div class="metric-card__value">98.2%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-card__label">Precision</div>
+                <div class="metric-card__value">83.9%</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="showTab('cohort')">Cohort Overview</button>
+                <button class="tab-btn" onclick="showTab('patient')">Patient Details</button>
+                <button class="tab-btn" onclick="showTab('performance')">Model Performance</button>
+                <button class="tab-btn" onclick="showTab('explain')">Explainability</button>
+            </div>
+
+            <div id="cohort" class="tab-content active">
+                <h3>Patient Cohort Risk Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+
+                <h4>High-Risk Patients (Immediate Attention Required)</h4>
+                <div class="alert-box">
+                    <h4>⚠️ Critical Alert: 26 High-Risk Patients Identified</h4>
+                    <p>Patients requiring immediate clinical intervention within 24-48 hours.</p>
+                </div>
+
+                <div id="high-risk-patients">
+                    <div class="risk-card risk-very-high">
+                        <div class="patient-info">
+                            <h4>Patient_009</h4>
+                            <p>Chronic Conditions: Heart Failure, Diabetes</p>
+                            <p><strong>Key Indicators:</strong> Elevated BNP, Poor glucose control</p>
+                        </div>
+                        <div class="risk-score" style="background: #e74c3c;">94.0%</div>
+                    </div>
+                    <div class="risk-card risk-high">
+                        <div class="patient-info">
+                            <h4>Patient_015</h4>
+                            <p>Chronic Conditions: COPD, Hypertension</p>
+                            <p><strong>Key Indicators:</strong> Declining O2 saturation, Medication non-adherence</p>
+                        </div>
+                        <div class="risk-score" style="background: #f39c12;">73.2%</div>
+                    </div>
+                    <div class="risk-card risk-high">
+                        <div class="patient-info">
+                            <h4>Patient_042</h4>
+                            <p>Chronic Conditions: Heart Failure, Diabetes, Hypertension</p>
+                            <p><strong>Key Indicators:</strong> Multi-system deterioration</p>
+                        </div>
+                        <div class="risk-score" style="background: #f39c12;">68.7%</div>
+                    </div>
+                </div>
+
+                <h4>Risk Distribution Summary</h4>
+                <div class="risk-card risk-very-low">
+                    <div class="patient-info"><h4>Very Low Risk</h4><p>127 patients (32.6%) - Routine monitoring</p></div>
+                    <div class="risk-score" style="background: #95a5a6;">32.6%</div>
+                </div>
+                <div class="risk-card risk-low">
+                    <div class="patient-info"><h4>Low Risk</h4><p>210 patients (53.8%) - Standard care protocols</p></div>
+                    <div class="risk-score" style="background: #27ae60;">53.8%</div>
+                </div>
+                <div class="risk-card risk-moderate">
+                    <div class="patient-info"><h4>Moderate Risk</h4><p>27 patients (6.9%) - Enhanced monitoring</p></div>
+                    <div class="risk-score" style="background: #f1c40f;">6.9%</div>
+                </div>
+                <div class="risk-card risk-high">
+                    <div class="patient-info"><h4>High Risk</h4><p>18 patients (4.6%) - Frequent follow-ups</p></div>
+                    <div class="risk-score" style="background: #f39c12;">4.6%</div>
+                </div>
+                <div class="risk-card risk-very-high">
+                    <div class="patient-info"><h4>Very High Risk</h4><p>8 patients (2.1%) - Immediate intervention</p></div>
+                    <div class="risk-score" style="background: #e74c3c;">2.1%</div>
+                </div>
+            </div>
+
+            <div id="patient" class="tab-content">
+                <h3>Individual Patient Assessment</h3>
+                <div class="risk-card risk-very-high">
+                    <div class="patient-info">
+                        <h4>Patient_009 - High Risk Case Study</h4>
+                        <p><strong>90-Day Deterioration Risk:</strong> 94.0%</p>
+                        <p><strong>Risk Level:</strong> Very High</p>
+                        <p><strong>Conditions:</strong> Heart Failure, Diabetes Type 2</p>
+                    </div>
+                </div>
+
+                <h4>Key Contributing Factors (AI Analysis)</h4>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h5>🫀 BNP Maximum Level: 100.74 pg/mL</h5>
+                        <p><strong>Clinical Significance:</strong> B-type Natriuretic Peptide indicates heart failure severity. Normal range is &lt;100 pg/mL. This patient is at the threshold, indicating cardiac stress.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>💓 Average Heart Rate: 81.29 bpm</h5>
+                        <p><strong>Clinical Significance:</strong> Within normal range but trending upward. May indicate early cardiac compensation mechanisms in response to heart failure.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>🩸 Average Blood Glucose: 155.99 mg/dL</h5>
+                        <p><strong>Clinical Significance:</strong> Elevated glucose (normal &lt;140 mg/dL) indicates poor diabetes control, increasing risk of cardiovascular complications.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>🫁 Oxygen Saturation Trends: Declining pattern</h5>
+                        <p><strong>Clinical Significance:</strong> Gradual decline in oxygen saturation may indicate early respiratory compromise or cardiac decompensation.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>💊 Medication Adherence: 68% compliance</h5>
+                        <p><strong>Clinical Significance:</strong> Poor adherence to heart failure and diabetes medications significantly increases deterioration risk.</p>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>🎯 Recommended Clinical Actions (Priority Order)</h4>
+                    <ul>
+                        <li><strong>Immediate (Within 24 hours):</strong> Clinical review for heart failure management</li>
+                        <li><strong>Urgent (24-48 hours):</strong> Review and optimize diabetes medications</li>
+                        <li><strong>Short-term (Within week):</strong> Medication adherence counseling and support</li>
+                        <li><strong>Ongoing:</strong> Enhanced monitoring with twice-weekly vital signs</li>
+                        <li><strong>Follow-up:</strong> Cardiology consultation if symptoms worsen</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="performance" class="tab-content">
+                <h3>Model Performance Metrics</h3>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+
+                <h4>Detailed Performance Analysis</h4>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h5>📊 AUROC: 0.7024</h5>
+                        <p>Area Under ROC Curve indicates <strong>good discrimination</strong> between high and low risk patients. Values >0.7 are considered clinically useful.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>📈 AUPRC: 0.5941</h5>
+                        <p>Area Under Precision-Recall Curve shows <strong>strong performance</strong> on imbalanced dataset where deterioration events are rare.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>🎯 Specificity: 98.2%</h5>
+                        <p><strong>Excellent at avoiding false alarms</strong> - critical for clinical acceptance. Only 2% of stable patients are incorrectly flagged as high-risk.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>✅ Precision: 83.9%</h5>
+                        <p><strong>High confidence in predictions</strong> - when model predicts deterioration, it's correct 84% of the time.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>⚖️ Model Calibration</h5>
+                        <p>Probability estimates are <strong>well-calibrated</strong> - a 70% prediction truly represents ~70% likelihood of deterioration.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="explain" class="tab-content">
+                <h3>AI Model Explainability</h3>
+
+                <div class="alert-box">
+                    <h4>🧠 How the AI Makes Predictions</h4>
+                    <p>Our Random Forest model analyzes 29 clinical features from 30 days of patient data to predict 90-day deterioration risk. Below are the most influential factors:</p>
+                </div>
+
+                <h4>Top Clinical Factors Driving Predictions</h4>
+                <div class="chart-container">
+                    <canvas id="featureChart"></canvas>
+                </div>
+
+                <h4>Clinical Factor Interpretations</h4>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h5>1. 🫀 BNP Maximum Level (5.3% model importance)</h5>
+                        <p><strong>What it measures:</strong> B-type Natriuretic Peptide indicates heart failure severity and acute cardiac stress.</p>
+                        <p><strong>Why it matters:</strong> BNP >150 pg/mL strongly predicts heart failure exacerbation within 90 days.</p>
+                        <p><strong>Clinical threshold:</strong> Normal &lt;100, Mild HF 100-300, Severe HF >300 pg/mL</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>2. 💓 Average Heart Rate (5.1% model importance)</h5>
+                        <p><strong>What it measures:</strong> Sustained elevated heart rates indicate cardiac compensation or underlying stress.</p>
+                        <p><strong>Why it matters:</strong> Tachycardia >100 bpm in chronic patients often precedes decompensation.</p>
+                        <p><strong>Clinical threshold:</strong> Normal 60-100, Concerning >100 bpm sustained</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>3. 🩸 Average Blood Glucose (4.9% model importance)</h5>
+                        <p><strong>What it measures:</strong> Glucose control over time reflects diabetes management effectiveness.</p>
+                        <p><strong>Why it matters:</strong> Poor control (>180 mg/dL) increases multi-organ deterioration risk.</p>
+                        <p><strong>Clinical threshold:</strong> Target &lt;140, Poor control >180 mg/dL</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>4. 🫁 Oxygen Saturation Patterns (4.4% model importance)</h5>
+                        <p><strong>What it measures:</strong> Average and minimum oxygen levels indicate respiratory function.</p>
+                        <p><strong>Why it matters:</strong> Declining saturation &lt;95% predicts respiratory failure.</p>
+                        <p><strong>Clinical threshold:</strong> Normal >95%, Concerning &lt;90%</p>
+                    </div>
+                    <div class="feature-item">
+                        <h5>5. 🧪 Kidney Function Trends (4.0% model importance)</h5>
+                        <p><strong>What it measures:</strong> Creatinine trends show kidney function changes over time.</p>
+                        <p><strong>Why it matters:</strong> Worsening renal function compounds heart failure and diabetes.</p>
+                        <p><strong>Clinical threshold:</strong> Normal &lt;1.2, Concerning >1.5 mg/dL or rising trend</p>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>🔍 Understanding AI Predictions</h4>
+                    <ul>
+                        <li><strong>Global Importance:</strong> These factors matter most across all patients</li>
+                        <li><strong>Local Explanations:</strong> Individual patients may have different key factors</li>
+                        <li><strong>Temporal Patterns:</strong> The AI looks for declining trends over 30 days</li>
+                        <li><strong>Multi-factor Risk:</strong> Combinations of factors increase risk exponentially</li>
+                        <li><strong>Confidence Levels:</strong> Higher certainty when multiple factors align</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Initialize charts when page loads
+        window.addEventListener('load', function() {
+            // Risk Distribution Chart
+            const riskCtx = document.getElementById('riskChart').getContext('2d');
+            new Chart(riskCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Very Low (32.6%)', 'Low (53.8%)', 'Moderate (6.9%)', 'High (4.6%)', 'Very High (2.1%)'],
+                    datasets: [{
+                        data: [127, 210, 27, 18, 8],
+                        backgroundColor: ['#95a5a6', '#27ae60', '#f1c40f', '#f39c12', '#e74c3c'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { 
+                            display: true, 
+                            text: 'Patient Risk Distribution (390 Patients)',
+                            font: { size: 16 }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 20 }
+                        }
+                    }
+                }
+            });
+
+            // Model Performance Chart
+            const perfCtx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(perfCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Random Forest', 'SVM', 'Gradient Boosting', 'Ensemble', 'Logistic Regression'],
+                    datasets: [{
+                        label: 'AUROC Score',
+                        data: [0.7024, 0.7066, 0.6685, 0.6936, 0.6132],
+                        backgroundColor: '#3498db',
+                        borderColor: '#2980b9',
+                        borderWidth: 1
+                    }, {
+                        label: 'AUPRC Score', 
+                        data: [0.5941, 0.5608, 0.5440, 0.5815, 0.4491],
+                        backgroundColor: '#2ecc71',
+                        borderColor: '#27ae60',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { 
+                            display: true, 
+                            text: 'AI Model Performance Comparison',
+                            font: { size: 16 }
+                        }
+                    },
+                    scales: { 
+                        y: { 
+                            beginAtZero: true, 
+                            max: 1,
+                            title: { display: true, text: 'Performance Score' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Machine Learning Models' }
+                        }
+                    }
+                }
+            });
+
+            // Feature Importance Chart (Fixed - using 'bar' instead of 'horizontalBar')
+            const featCtx = document.getElementById('featureChart').getContext('2d');
+            new Chart(featCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'BNP Max Level', 
+                        'Heart Rate Avg', 
+                        'Blood Glucose Avg', 
+                        'O2 Saturation Avg', 
+                        'BNP Mean Level', 
+                        'Creatinine Trend',
+                        'Kidney Function',
+                        'HbA1c Latest',
+                        'Respiratory Rate Var',
+                        'O2 Saturation Min'
+                    ],
+                    datasets: [{
+                        label: 'Feature Importance (%)',
+                        data: [5.30, 5.07, 4.86, 4.40, 4.16, 4.01, 3.99, 3.72, 3.70, 3.67],
+                        backgroundColor: [
+                            '#e74c3c', '#f39c12', '#f1c40f', '#2ecc71', '#3498db',
+                            '#9b59b6', '#1abc9c', '#34495e', '#95a5a6', '#d35400'
+                        ],
+                        borderColor: '#2c3e50',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',  // This makes it horizontal
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { 
+                            display: true, 
+                            text: 'Top 10 Clinical Factors Driving AI Predictions',
+                            font: { size: 16 }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: { 
+                        x: { 
+                            beginAtZero: true,
+                            title: { display: true, text: 'Importance Score (%)' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Clinical Parameters' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

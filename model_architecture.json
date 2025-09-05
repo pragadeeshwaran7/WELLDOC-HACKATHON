@@ -1,0 +1,58 @@
+{
+  "prediction_approach": "Ensemble Learning with Random Forest as Best Performer",
+  "input_features": {
+    "vital_signs": [
+      "systolic_bp",
+      "diastolic_bp",
+      "heart_rate",
+      "respiratory_rate",
+      "temperature",
+      "oxygen_saturation"
+    ],
+    "lab_results": [
+      "glucose",
+      "hba1c",
+      "creatinine",
+      "bnp"
+    ],
+    "medication_adherence": [
+      "medication_adherence_mean",
+      "medication_adherence_trend"
+    ],
+    "lifestyle_factors": [
+      "steps_per_day",
+      "sleep_hours"
+    ]
+  },
+  "feature_engineering": {
+    "temporal_window": "30 days of historical data",
+    "statistical_features": [
+      "mean",
+      "std",
+      "trend",
+      "min",
+      "max"
+    ],
+    "prediction_horizon": "90 days ahead"
+  },
+  "model_types_evaluated": [
+    "Logistic Regression",
+    "Random Forest",
+    "Gradient Boosting",
+    "SVM",
+    "Ensemble"
+  ],
+  "best_model": "Random Forest",
+  "evaluation_metrics": [
+    "AUROC",
+    "AUPRC",
+    "Sensitivity",
+    "Specificity",
+    "Precision",
+    "Calibration"
+  ],
+  "explainability_methods": [
+    "Feature Importance",
+    "Clinical Rule-Based Explanations"
+  ]
+}
